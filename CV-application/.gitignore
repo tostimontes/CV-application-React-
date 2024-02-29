@@ -11,7 +11,9 @@ node_modules
 dist
 dist-ssr
 *.local
-template.md
+CV-application/template.md
+CV-application/diagram.xml
+CV-application/diagram.drawio
 
 # Editor directories and files
 .vscode/*
