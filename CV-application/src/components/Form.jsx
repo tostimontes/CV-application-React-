@@ -4,6 +4,16 @@ import Button from './Buttons';
 import Input from './Input';
 import { validate } from 'uuid';
 
+function createInitialState(id, inputs) {
+  const initialState = { id };
+
+  inputs.forEach((input) => {
+    initialState[input.name] = input.value || '';
+  });
+
+  return initialState;
+}
+
 export default function Form({
   id,
   title,
@@ -21,15 +31,6 @@ export default function Form({
 
   const [formData, setFormData] = useState({ ...originalData });
 
-  function createInitialState(id, inputs) {
-    const initialState = { id };
-
-    inputs.forEach((input) => {
-      initialState[input.name] = input.value || '';
-    });
-
-    return initialState;
-  }
 
   function handleChange(field) {
     return function (e) {
@@ -67,6 +68,7 @@ export default function Form({
                 id={input.id}
                 value={formData[input.name]}
                 placeholder={input.placeholder}
+                type={input.type}
                 onChange={handleChange(input.name)}
                 name={input.name}
                 className={input.className}
