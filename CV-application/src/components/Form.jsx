@@ -4,16 +4,6 @@ import Button from './Buttons';
 import Input from './Input';
 import { validate } from 'uuid';
 
-function createInitialState(id, inputs) {
-  const initialState = { id };
-
-  inputs.forEach((input) => {
-    initialState[input.name] = input.value || '';
-  });
-
-  return initialState;
-}
-
 export default function Form({
   id,
   title,
@@ -25,12 +15,7 @@ export default function Form({
   onDelete,
   initialData,
 }) {
-  const [originalData] = useState(
-    initialData || createInitialState(id, inputs),
-  );
-
-  const [formData, setFormData] = useState({ ...originalData });
-
+  const [formData, setFormData] = useState({ id, ...initialData });
 
   function handleChange(field) {
     return function (e) {
@@ -41,8 +26,6 @@ export default function Form({
     };
   }
 
-  function handleEdit(params) {}
-
   function handleSubmit(e) {
     e.preventDefault();
     onSubmit(formData);
@@ -50,9 +33,12 @@ export default function Form({
 
   function handleCancel(e) {
     e.preventDefault();
-    setFormData({ ...originalData });
+    const newFormData = { id, ...initialData };
+    setFormData(newFormData);
+    onReset(newFormData);
   }
 
+  // TODO: autoFocus on first input
   return (
     <>
       <form action="" onSubmit={handleSubmit} onReset={handleCancel}>

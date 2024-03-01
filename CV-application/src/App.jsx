@@ -73,7 +73,7 @@ function App() {
   const [educationForms, setEducationForms] = useState([]);
   const [jobForms, setJobForms] = useState([]);
 
-  const [isAddingNewForm, setIsAddingNewForm] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
   // const [isEditing, setIsEditing] = useState(false);
 
   // Helpers and handlers
@@ -90,7 +90,21 @@ function App() {
       function updateForms(forms) {
         return forms.map((form) => {
           if (form.id === formData.id) {
-            return { ...form, ...formData, isEditing: false };
+            const updatedInputs = form.inputs.map((input) => {
+              return {
+                ...input,
+                value:
+                  formData[input.name] !== undefined
+                    ? formData[input.name]
+                    : input.value,
+              };
+            });
+
+            return {
+              ...form,
+              inputs: updatedInputs,
+              isEditing: false,
+            };
           }
           return form;
         });
@@ -101,7 +115,7 @@ function App() {
       } else if (formData.id.startsWith('job-')) {
         setJobForms((prevForms) => updateForms(prevForms));
       }
-      setIsAddingNewForm(false);
+      setIsFormOpen(false);
     }
   };
 
@@ -285,27 +299,64 @@ function App() {
       };
       setJobForms((prevForms) => [...prevForms, newForm]);
     }
-    setIsAddingNewForm(true);
+    setIsFormOpen(true);
+  }
+
+  function handleFormCancel(formData) {
+    function updateForms(forms) {
+      return forms.map((form) => {
+        if (form.id === formData.id) {
+          const updatedInputs = form.inputs.map((input) => {
+            return {
+              ...input,
+              value:
+                formData[input.name] !== undefined
+                  ? formData[input.name]
+                  : input.value,
+            };
+          });
+
+          return {
+            ...form,
+            inputs: updatedInputs,
+            isEditing: false,
+          };
+        }
+        return form;
+      });
+    }
+
+    if (formData.id.startsWith('education-')) {
+      setEducationForms((prevForms) => updateForms(prevForms));
+    } else if (formData.id.startsWith('job-')) {
+      setJobForms((prevForms) => updateForms(prevForms));
+    }
+    setIsFormOpen(false);
   }
 
   // TODO: add functionality to delete button
-  function handleFormCancel() {
-    // take advantage of form onReset to reestablish old values
-  }
-
   function handleFormDelete() {}
 
   function handleEdit(formToEdit) {
+    setIsFormOpen(true);
     setEducationForms((prevForms) =>
       prevForms.map((form) =>
         form.id === formToEdit.id ? { ...form, isEditing: true } : form,
       ),
     );
-    // TODO: populate form for edition with old values
+  }
+
+  function setInitialData(form) {
+    const currentValues = {};
+
+    form.inputs.forEach((input) => {
+      currentValues[input.name] = input.value || '';
+    });
+
+    return currentValues;
   }
 
   // Arrays to pass props to components
-
   const exampleEducation = {
     inputs: [],
     buttons: [],
@@ -331,25 +382,23 @@ function App() {
           <h2>Education</h2>
           {educationForms.map((form) => (
             <>
-              {!form.isEditing && (
-                <>
-                  <div
-                    key={form.id}
-                    className="form-wrapper"
-                    onClick={() => handleEdit(form)}
+              {!form.isEditing && !isFormOpen && (
+                <div
+                  key={form.id}
+                  className="form-wrapper"
+                  onClick={() => handleEdit(form)}
+                >
+                  {`${form.inputs[1].value} from ${form.inputs[0].value} `}
+                  <Button
+                    id={uuidv4()}
+                    className="toggle-show"
+                    name="toggle-show"
+                    onClick={() => toggleShow()}
                   >
-                    {`${form.degree} from ${form.school} `}
-                    <Button
-                      id={uuidv4()}
-                      className="toggle-show"
-                      name="toggle-show"
-                      onClick={() => toggleShow()}
-                    >
-                      {/* TODO: the SVG should change depending on hide state */}
-                      {'SVG'}
-                    </Button>
-                  </div>
-                </>
+                    {/* TODO: the SVG should change depending on hide state */}
+                    {'SVG'}
+                  </Button>
+                </div>
               )}
               {form.isEditing && (
                 <Form
@@ -360,11 +409,12 @@ function App() {
                   onDelete={handleFormDelete}
                   onReset={handleFormCancel}
                   onEdit={handleFormEdit}
+                  initialData={setInitialData(form)}
                 />
               )}
             </>
           ))}
-          {!isAddingNewForm && (
+          {!isFormOpen && (
             <Button
               id={uuidv4()}
               className="add-button"
@@ -378,12 +428,24 @@ function App() {
         <div className="jobs">
           <h2>Professional experience</h2>
           {jobForms.map((form) => (
-            <div
-              key={form.id}
-              className="form-wrapper"
-              onClick={() => handleEdit(form.id)}
-            >
-              {`${form.position} at ${form.company} `}
+            <>
+              {!form.isEditing && !isFormOpen && (
+                <div
+                  key={form.id}
+                  className="form-wrapper"
+                  onClick={() => handleEdit(form)}
+                >
+                  {`${form.inputs[1].value} at ${form.inputs[0].value} `}
+                  <Button
+                    id={uuidv4()}
+                    className="toggle-show"
+                    name="toggle-show"
+                    onClick={() => toggleShow()}
+                  >
+                    {'SVG'}
+                  </Button>
+                </div>
+              )}
               {form.isEditing && (
                 <Form
                   id={form.id}
@@ -393,21 +455,12 @@ function App() {
                   onDelete={handleFormDelete}
                   onReset={handleFormCancel}
                   onEdit={handleFormEdit}
+                  initialData={setInitialData(form)}
                 />
               )}
-              {!form.isEditing && (
-                <Button
-                  id={uuidv4()}
-                  className="toggle-show"
-                  name="toggle-show"
-                  onClick={toggleShow}
-                >
-                  {'SVG'}
-                </Button>
-              )}
-            </div>
+            </>
           ))}
-          {!isAddingNewForm && (
+          {!isFormOpen && (
             <Button
               id={uuidv4()}
               className="add-button"
