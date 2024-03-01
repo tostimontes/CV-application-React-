@@ -77,7 +77,38 @@ function App() {
   // const [isEditing, setIsEditing] = useState(false);
 
   // Helpers and handlers
-  const handleFormSubmit = (formData) => {
+  function processFormsUpdate(formData) {
+    function updateForms(forms) {
+      return forms.map((form) => {
+        if (form.id === formData.id) {
+          const updatedInputs = form.inputs.map((input) => {
+            return {
+              ...input,
+              value:
+                formData[input.name] !== undefined
+                  ? formData[input.name]
+                  : input.value,
+            };
+          });
+
+          return {
+            ...form,
+            inputs: updatedInputs,
+            isEditing: false,
+          };
+        }
+        return form;
+      });
+    }
+    if (formData.id.startsWith('education-')) {
+      setEducationForms((prevForms) => updateForms(prevForms));
+    } else if (formData.id.startsWith('job-')) {
+      setJobForms((prevForms) => updateForms(prevForms));
+    }
+    setIsFormOpen(false);
+  }
+
+  function handleFormSubmit(formData) {
     if (formData.id === 'personalInfo') {
       setPersonalInfo((prevInfo) => ({
         ...prevInfo,
@@ -87,39 +118,9 @@ function App() {
         })),
       }));
     } else {
-      function updateForms(forms) {
-        return forms.map((form) => {
-          if (form.id === formData.id) {
-            const updatedInputs = form.inputs.map((input) => {
-              return {
-                ...input,
-                value:
-                  formData[input.name] !== undefined
-                    ? formData[input.name]
-                    : input.value,
-              };
-            });
-
-            return {
-              ...form,
-              inputs: updatedInputs,
-              isEditing: false,
-            };
-          }
-          return form;
-        });
-      }
-
-      if (formData.id.startsWith('education-')) {
-        setEducationForms((prevForms) => updateForms(prevForms));
-      } else if (formData.id.startsWith('job-')) {
-        setJobForms((prevForms) => updateForms(prevForms));
-      }
-      setIsFormOpen(false);
+      processFormsUpdate(formData);
     }
   };
-
-  function handleFormEdit() {}
 
   function toggleShow(form) {
     // update CVDisplay
@@ -188,7 +189,6 @@ function App() {
             className: 'delete-button',
             id: uuidv4(),
             children: ['Delete', 'D'],
-            onClick: handleFormDelete,
           },
           {
             name: 'cancel',
@@ -279,7 +279,6 @@ function App() {
             className: 'delete-button',
             id: uuidv4(),
             children: ['Delete', 'D'],
-            onClick: handleFormDelete,
           },
           {
             name: 'cancel',
@@ -303,43 +302,27 @@ function App() {
   }
 
   function handleFormCancel(formData) {
-    function updateForms(forms) {
-      return forms.map((form) => {
-        if (form.id === formData.id) {
-          const updatedInputs = form.inputs.map((input) => {
-            return {
-              ...input,
-              value:
-                formData[input.name] !== undefined
-                  ? formData[input.name]
-                  : input.value,
-            };
-          });
-
-          return {
-            ...form,
-            inputs: updatedInputs,
-            isEditing: false,
-          };
-        }
-        return form;
-      });
-    }
-
-    if (formData.id.startsWith('education-')) {
-      setEducationForms((prevForms) => updateForms(prevForms));
-    } else if (formData.id.startsWith('job-')) {
-      setJobForms((prevForms) => updateForms(prevForms));
-    }
-    setIsFormOpen(false);
+    processFormsUpdate(formData);
   }
 
-  // TODO: add functionality to delete button
-  function handleFormDelete() {}
+  function handleFormDeletion(formId) {
+      setEducationForms((prevForms) =>
+        prevForms.filter((form) => form.id !== formId),
+      );
+      setJobForms((prevForms) =>
+        prevForms.filter((form) => form.id !== formId),
+      );
+    setIsFormOpen(false);
+  }
 
   function handleEdit(formToEdit) {
     setIsFormOpen(true);
     setEducationForms((prevForms) =>
+      prevForms.map((form) =>
+        form.id === formToEdit.id ? { ...form, isEditing: true } : form,
+      ),
+    );
+    setJobForms((prevForms) =>
       prevForms.map((form) =>
         form.id === formToEdit.id ? { ...form, isEditing: true } : form,
       ),
@@ -406,9 +389,8 @@ function App() {
                   inputs={form.inputs}
                   buttons={form.buttons}
                   onSubmit={handleFormSubmit}
-                  onDelete={handleFormDelete}
                   onReset={handleFormCancel}
-                  onEdit={handleFormEdit}
+                  onDelete={() => handleFormDeletion(form.id)}
                   initialData={setInitialData(form)}
                 />
               )}
@@ -452,9 +434,8 @@ function App() {
                   inputs={form.inputs}
                   buttons={form.buttons}
                   onSubmit={handleFormSubmit}
-                  onDelete={handleFormDelete}
                   onReset={handleFormCancel}
-                  onEdit={handleFormEdit}
+                  onDelete={() => handleFormDeletion(form.id)}
                   initialData={setInitialData(form)}
                 />
               )}

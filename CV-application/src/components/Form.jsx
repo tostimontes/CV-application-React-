@@ -38,6 +38,10 @@ export default function Form({
     onReset(newFormData);
   }
 
+  function handleDelete() {
+    onDelete();
+  }
+
   // TODO: autoFocus on first input
   return (
     <>
@@ -64,6 +68,17 @@ export default function Form({
           );
         })}
         {buttons.map((button) => {
+          if (button.name === 'delete') {
+            return (
+              <Button
+                key={button.id}
+                // other button props
+                onClick={handleDelete}
+              >
+                {button.children}
+              </Button>
+            );
+          }
           return (
             <Button
               key={button.id}
