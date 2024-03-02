@@ -74,7 +74,9 @@ function App() {
   const [jobForms, setJobForms] = useState([]);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
-  // const [isEditing, setIsEditing] = useState(false);
+
+  // TODO: on each forms refresh, they should get sorted from most recent to oldest
+  // TODO: add and get data from localStorage
 
   // Helpers and handlers
   function processFormsUpdate(formData) {
@@ -120,17 +122,26 @@ function App() {
     } else {
       processFormsUpdate(formData);
     }
-  };
-
-  function toggleShow(form) {
-    // update CVDisplay
   }
 
+  function toggleShow(formId) {
+    setEducationForms((prevForms) =>
+      prevForms.map((form) =>
+        form.id === formId ? { ...form, isVisible: !form.isVisible } : form,
+      ),
+    );
+    setJobForms((prevForms) =>
+      prevForms.map((form) =>
+        form.id === formId ? { ...form, isVisible: !form.isVisible } : form,
+      ),
+    );
+  }
   function createNewForm(formType) {
     if (formType === 'education') {
       const newForm = {
         id: `education-${uuidv4()}`,
         isEditing: true,
+        isVisible: true,
         inputs: [
           {
             name: 'school',
@@ -211,6 +222,7 @@ function App() {
       const newForm = {
         id: `job-${uuidv4()}`,
         isEditing: true,
+        isVisible: true,
         inputs: [
           {
             name: 'company',
@@ -306,12 +318,10 @@ function App() {
   }
 
   function handleFormDeletion(formId) {
-      setEducationForms((prevForms) =>
-        prevForms.filter((form) => form.id !== formId),
-      );
-      setJobForms((prevForms) =>
-        prevForms.filter((form) => form.id !== formId),
-      );
+    setEducationForms((prevForms) =>
+      prevForms.filter((form) => form.id !== formId),
+    );
+    setJobForms((prevForms) => prevForms.filter((form) => form.id !== formId));
     setIsFormOpen(false);
   }
 
@@ -339,6 +349,42 @@ function App() {
     return currentValues;
   }
 
+  function prepareDataForDisplay(personalInfo, educationForms, jobForms) {
+    const header = {};
+    const education = [];
+    const jobs = [];
+
+    personalInfo.inputs.forEach((input) => {
+      header[input.name] = input.value;
+    });
+
+    educationForms.forEach((form) => {
+      if (form.isVisible !== false) {
+        const educationData = {};
+        form.inputs.forEach((input) => {
+          educationData[input.name] = input.value;
+        });
+        education.push(educationData);
+      }
+    });
+
+    jobForms.forEach((form) => {
+      if (form.isVisible !== false) {
+        const jobData = {};
+        form.inputs.forEach((input) => {
+          jobData[input.name] = input.value;
+        });
+        jobs.push(jobData);
+      }
+    });
+
+    return {
+      header,
+      education,
+      jobs,
+    };
+  }
+
   // Arrays to pass props to components
   const exampleEducation = {
     inputs: [],
@@ -352,8 +398,8 @@ function App() {
 
   return (
     <>
-      <h1>CV Builder</h1>
       <div className="forms">
+        <h1>CV Builder</h1>
         <Form
           id={personalInfo.id}
           title={personalInfo.title}
@@ -376,9 +422,8 @@ function App() {
                     id={uuidv4()}
                     className="toggle-show"
                     name="toggle-show"
-                    onClick={() => toggleShow()}
+                    onClick={() => toggleShow(form.id)}
                   >
-                    {/* TODO: the SVG should change depending on hide state */}
                     {'SVG'}
                   </Button>
                 </div>
@@ -422,7 +467,7 @@ function App() {
                     id={uuidv4()}
                     className="toggle-show"
                     name="toggle-show"
-                    onClick={() => toggleShow()}
+                    onClick={() => toggleShow(form.id)}
                   >
                     {'SVG'}
                   </Button>
@@ -453,9 +498,15 @@ function App() {
           )}
         </div>
       </div>
-      {/* 
-    <CVDisplay></CVDisplay> 
-    */}
+
+      <CVDisplay
+        className="display"
+        displayData={prepareDataForDisplay(
+          personalInfo,
+          educationForms,
+          jobForms,
+        )}
+      ></CVDisplay>
     </>
   );
 }

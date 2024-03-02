@@ -1,28 +1,33 @@
-import '../styles/CVDisplay.css'
+import '../styles/CVDisplay.css';
 
-export default function CVDisplay({props}) {
-    
+export default function CVDisplay({ className, displayData }) {
+  // TODO: each edu and job form should have an identifier or something so that it groups each card and both education and jobs can be iterated over in a uniform way
+  const { header, education, jobs } = displayData;
+  return (
+    <div className={className}>
+      <div className="header">
+        <h2>Hola World</h2>
+        <p>{header.fullName}</p>
+        {education.map(item => {
+          return (
+            <p>{item.company}</p>
+          )
+        })}
+        <p>{}</p>
+        <p>{}</p>
+        <p>{}</p>
+      </div>
+      <div className="education-display">
+        <h2>Education</h2>
+        <div className="card">
+          {education.map(item => {
 
-    return (
-        <>
-            <div className="CVDisplay">
-                <div className="personal-info">
-                    <h2>{name}</h2>
-                    <div className="contact-info">
-                        <div className="email">{email}</div>
-                        <div className="phone">{phone}</div>
-                        <div className="city">{city}</div>
-                    </div>
-                </div>
-                <div className="education">
-                    <h2>Education</h2>
-                    {education.map()}
-                </div>
-                <div className="professional-experience">
-                    <h2>Professional experience</h2>
-                    {jobs.map()}
-                </div>
-            </div>
-        </>
-    )
+          })}
+        </div>
+      </div>
+      <div className="jobs-display">
+        <h2>Professional experience</h2>
+      </div>
+    </div>
+  );
 }
