@@ -8,6 +8,7 @@ import { mdiTrashCanOutline, mdiCancel } from '@mdi/js';
 
 export default function Form({
   id,
+  className,
   title,
   inputs,
   buttons,
@@ -55,7 +56,7 @@ export default function Form({
   // TODO: autoFocus on first input
   return (
     <>
-      <form action="" onSubmit={handleSubmit} onReset={handleCancel}>
+      <form action="" className={className} onSubmit={handleSubmit} onReset={handleCancel}>
         {title && <h2>{title}</h2>}
         {inputs.map((input) => {
           return (
@@ -63,8 +64,12 @@ export default function Form({
               <label htmlFor={input.id}>
                 {input.dataLabel}{' '}
                 <span>
-                  {input.name === 'end-date' &&
-                    '(Leave empty for ongoing activities)'}
+                  {input.name === 'end-date' && (
+                    <>
+                      <br />
+                      (Leave empty for ongoing activities)
+                    </>
+                  )}
                   {input.isRequired && 'required'}
                 </span>
               </label>
@@ -84,36 +89,15 @@ export default function Form({
             </>
           );
         })}
-        {buttons.map((button) => {
-          if (button.name === 'delete') {
-            return (
-              <Button
-                key={button.id}
-                id={button.id}
-                iconPath={button.iconPath}
-                onClick={handleDelete}
-                value={button.text}
-              >
-                {button.iconPath && <Icon path={button.iconPath} />}
-                {button.text}
-              </Button>
-            );
-          }
-          if (id === 'personal-info') {
-            if (
-              (isEditing &&
-                (button.name === 'save' || button.name === 'cancel')) ||
-              (!isEditing && button.name === 'edit')
-            ) {
+        <div className="buttons-wrapper">
+          {buttons.map((button) => {
+            if (button.name === 'delete') {
               return (
                 <Button
                   key={button.id}
                   id={button.id}
-                  type={button.type}
                   iconPath={button.iconPath}
-                  onClick={
-                    button.name === 'edit' ? handlePersonalEdit : button.onClick
-                  }
+                  onClick={handleDelete}
                   value={button.text}
                 >
                   {button.iconPath && <Icon path={button.iconPath} />}
@@ -121,23 +105,45 @@ export default function Form({
                 </Button>
               );
             }
-            return null;
-          }
-
-          return (
-            <Button
-              key={button.id}
-              id={button.id}
-              type={button.type}
-              iconPath={button.iconPath}
-              onClick={button.onClick}
-              value={button.text}
-            >
-              {button.iconPath && <Icon path={button.iconPath} />}
-              {button.text}
-            </Button>
-          );
-        })}
+            if (id === 'personal-info') {
+              if (
+                (isEditing &&
+                  (button.name === 'save' || button.name === 'cancel')) ||
+                (!isEditing && button.name === 'edit')
+              ) {
+                return (
+                  <Button
+                    key={button.id}
+                    id={button.id}
+                    type={button.type}
+                    iconPath={button.iconPath}
+                    onClick={
+                      button.name === 'edit' ? handlePersonalEdit : button.onClick
+                    }
+                    value={button.text}
+                  >
+                    {button.iconPath && <Icon path={button.iconPath} />}
+                    {button.text}
+                  </Button>
+                );
+              }
+              return null;
+            }
+            return (
+              <Button
+                key={button.id}
+                id={button.id}
+                type={button.type}
+                iconPath={button.iconPath}
+                onClick={button.onClick}
+                value={button.text}
+              >
+                {button.iconPath && <Icon path={button.iconPath} />}
+                {button.text}
+              </Button>
+            );
+          })}
+        </div>
       </form>
     </>
   );

@@ -449,106 +449,119 @@ function App() {
     <>
       <div className="forms">
         <h1>CV Builder</h1>
-        <Form
-          id={personalInfo.id}
-          isEditing={personalInfo.isEditing}
-          title={personalInfo.title}
-          inputs={personalInfo.inputs}
-          buttons={personalInfo.buttons}
-          onSubmit={processFormsUpdate}
-          onReset={processFormsUpdate}
-          onEdit={() => handleEdit(personalInfo)}
-          initialData={setInitialData(personalInfo)}
-        ></Form>
-        <div className="education">
-          <h2>Education</h2>
-          {educationForms.map((form) => (
-            <>
-              {!form.isEditing && !isFormOpen && (
-                <div
-                  key={form.id}
-                  className="form-wrapper"
-                  onClick={() => handleEdit(form)}
-                >
-                  {`${form.inputs[1].value} from ${form.inputs[0].value} `}
-                  <Button
-                    id={uuidv4()}
-                    className="toggle-show"
-                    name="toggle-show"
-                    onClick={() => toggleShow(form.id)}
+        <div className="forms-wrapper">
+          <Form
+            className="input-forms"
+            id={personalInfo.id}
+            isEditing={personalInfo.isEditing}
+            title={personalInfo.title}
+            inputs={personalInfo.inputs}
+            buttons={personalInfo.buttons}
+            onSubmit={processFormsUpdate}
+            onReset={processFormsUpdate}
+            onEdit={() => handleEdit(personalInfo)}
+            initialData={setInitialData(personalInfo)}
+          ></Form>
+          <div className="education">
+            <h2>Education</h2>
+            {educationForms.map((form) => (
+              <>
+                {!form.isEditing && !isFormOpen && (
+                  <div
+                    key={form.id}
+                    className="form-wrapper"
+                    onClick={() => handleEdit(form)}
                   >
-                    {form.isVisible ? <Icon path={mdiEye}/> : <Icon path={mdiEyeClosed}/>}
-                  </Button>
-                </div>
-              )}
-              {form.isEditing && (
-                <Form
-                  id={form.id}
-                  inputs={form.inputs}
-                  buttons={form.buttons}
-                  onSubmit={processFormsUpdate}
-                  onReset={processFormsUpdate}
-                  onDelete={() => handleFormDeletion(form.id)}
-                  initialData={setInitialData(form)}
-                />
-              )}
-            </>
-          ))}
-          {!isFormOpen && (
-            <Button
-              id={uuidv4()}
-              className="add-button"
-              name="add-education"
-              onClick={() => createNewForm('education')}
-            >
-              {'+ Education'}
-            </Button>
-          )}
-        </div>
-        <div className="jobs">
-          <h2>Professional experience</h2>
-          {jobForms.map((form) => (
-            <>
-              {!form.isEditing && !isFormOpen && (
-                <div
-                  key={form.id}
-                  className="form-wrapper"
-                  onClick={() => handleEdit(form)}
-                >
-                  {`${form.inputs[1].value} at ${form.inputs[0].value} `}
-                  <Button
-                    id={uuidv4()}
-                    className="toggle-show"
-                    name="toggle-show"
-                    onClick={() => toggleShow(form.id)}
+                    {`${form.inputs[1].value} from ${form.inputs[0].value} `}
+                    <Button
+                      id={uuidv4()}
+                      className="toggle-show"
+                      name="toggle-show"
+                      onClick={() => toggleShow(form.id)}
+                    >
+                      {form.isVisible ? (
+                        <Icon path={mdiEye} />
+                      ) : (
+                        <Icon path={mdiEyeClosed} />
+                      )}
+                    </Button>
+                  </div>
+                )}
+                {form.isEditing && (
+                  <Form
+                    className="input-forms"
+                    id={form.id}
+                    inputs={form.inputs}
+                    buttons={form.buttons}
+                    onSubmit={processFormsUpdate}
+                    onReset={processFormsUpdate}
+                    onDelete={() => handleFormDeletion(form.id)}
+                    initialData={setInitialData(form)}
+                  />
+                )}
+              </>
+            ))}
+            {!isFormOpen && (
+              <Button
+                id={uuidv4()}
+                className="add-button"
+                name="add-education"
+                onClick={() => createNewForm('education')}
+              >
+                {'+ Education'}
+              </Button>
+            )}
+          </div>
+          <div className="jobs">
+            <h2>Professional experience</h2>
+            {jobForms.map((form) => (
+              <>
+                {!form.isEditing && !isFormOpen && (
+                  <div
+                    key={form.id}
+                    className="form-wrapper"
+                    onClick={() => handleEdit(form)}
                   >
-                    {form.isVisible ? <Icon path={mdiEye}/> : <Icon path={mdiEyeClosed}/>}
-                  </Button>
-                </div>
-              )}
-              {form.isEditing && (
-                <Form
-                  id={form.id}
-                  inputs={form.inputs}
-                  buttons={form.buttons}
-                  onSubmit={processFormsUpdate}
-                  onReset={processFormsUpdate}
-                  onDelete={() => handleFormDeletion(form.id)}
-                  initialData={setInitialData(form)}
-                />
-              )}
-            </>
-          ))}
-          {!isFormOpen && (
-            <Button
-              id={uuidv4()}
-              className="add-button"
-              name="add-job"
-              onClick={() => createNewForm('jobs')}
-            >
-              {'+ Job'}
-            </Button>
-          )}
+                    {`${form.inputs[1].value} at ${form.inputs[0].value} `}
+                    <Button
+                      id={uuidv4()}
+                      className="toggle-show"
+                      name="toggle-show"
+                      onClick={() => toggleShow(form.id)}
+                    >
+                      {form.isVisible ? (
+                        <Icon path={mdiEye} />
+                      ) : (
+                        <Icon path={mdiEyeClosed} />
+                      )}
+                    </Button>
+                  </div>
+                )}
+                {form.isEditing && (
+                  <Form
+                    className="input-forms"
+                    id={form.id}
+                    inputs={form.inputs}
+                    buttons={form.buttons}
+                    onSubmit={processFormsUpdate}
+                    onReset={processFormsUpdate}
+                    onDelete={() => handleFormDeletion(form.id)}
+                    initialData={setInitialData(form)}
+                  />
+                )}
+              </>
+            ))}
+            {!isFormOpen && (
+              <Button
+                id={uuidv4()}
+                className="add-button"
+                name="add-job"
+                onClick={() => createNewForm('jobs')}
+              >
+                {'+ Job'}
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
