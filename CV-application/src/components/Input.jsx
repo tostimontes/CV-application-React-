@@ -7,6 +7,7 @@ export default function Input({
   type = 'text',
   name,
   id,
+  max,
   className,
   disabled = false,
   style,
@@ -34,6 +35,7 @@ export default function Input({
       type={type}
       name={name}
       id={id}
+      max={max}
       className={className}
       disabled={disabled}
       style={style}

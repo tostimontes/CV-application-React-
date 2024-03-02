@@ -19,6 +19,8 @@ export default function Form({
 }) {
   const [formData, setFormData] = useState({ id, ...initialData });
 
+  const today = new Date().toISOString().split('T')[0];
+
   function handleChange(field) {
     return function (e) {
       setFormData((prevFormData) => ({
@@ -57,7 +59,7 @@ export default function Form({
           return (
             <>
               <label htmlFor={input.id}>
-                {input.dataLabel} <span>{input.isRequired && 'required'}</span>
+                {input.dataLabel} <span>{input.name === 'end-date' && '(Leave empty for ongoing activities)'}{input.isRequired && 'required'}</span>
               </label>
               <Input
                 key={input.id}
@@ -65,6 +67,7 @@ export default function Form({
                 value={formData[input.name]}
                 placeholder={input.placeholder}
                 type={input.type}
+                max={input.name === 'end-date' ? today : undefined}
                 onChange={handleChange(input.name)}
                 name={input.name}
                 className={input.className}
@@ -75,7 +78,6 @@ export default function Form({
           );
         })}
         {buttons.map((button) => {
-          // Handle delete button for all forms
           if (button.name === 'delete') {
             return (
               <Button key={button.id} onClick={handleDelete}>
@@ -83,31 +85,28 @@ export default function Form({
               </Button>
             );
           }
-
-          // Specific logic for 'personal-info' form
           if (id === 'personal-info') {
-              if (
-                (isEditing &&
-                  (button.name === 'save' || button.name === 'cancel')) ||
-                (!isEditing && button.name === 'edit')
-              ) {
-                
-                return (
-                  <Button
-                    key={button.id}
-                    id={button.id}
-                    type={button.type}
-                    onClick={button.name === 'edit' ? handlePersonalEdit: button.onClick}
-                  >
-                    {button.children.join(' ')}
-                  </Button>
-                );
-              }
-            // Skip rendering other buttons in edit mode for personal-info
+            if (
+              (isEditing &&
+                (button.name === 'save' || button.name === 'cancel')) ||
+              (!isEditing && button.name === 'edit')
+            ) {
+              return (
+                <Button
+                  key={button.id}
+                  id={button.id}
+                  type={button.type}
+                  onClick={
+                    button.name === 'edit' ? handlePersonalEdit : button.onClick
+                  }
+                >
+                  {button.children.join(' ')}
+                </Button>
+              );
+            }
             return null;
           }
 
-          // Default button render for other forms
           return (
             <Button
               key={button.id}

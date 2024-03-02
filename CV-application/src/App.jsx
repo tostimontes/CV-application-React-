@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import Input from './components/Input';
 import Button from './components/Buttons';
@@ -8,78 +8,103 @@ import { v4 as uuidv4 } from 'uuid';
 
 function App() {
   // Hooks
-  const [personalInfo, setPersonalInfo] = useState({
-    id: 'personal-info',
-    isEditing: true,
-    title: 'Personal information',
-    inputs: [
-      {
-        name: 'fullName',
-        value: '',
-        placeholder: 'Enter your full name',
-        type: 'text',
-        id: uuidv4(),
-        className: 'full-name',
-        isRequired: true,
-        dataLabel: 'Full name',
-      },
-      {
-        name: 'email',
-        value: '',
-        placeholder: 'Enter your email',
-        type: 'email',
-        id: uuidv4(),
-        className: 'email',
-        isRequired: true,
-        dataLabel: 'Email',
-      },
-      {
-        name: 'phone',
-        value: '',
-        placeholder: 'Enter your phone number',
-        type: 'text',
-        id: uuidv4(),
-        className: 'phone-number',
-        isRequired: true,
-        dataLabel: 'Phone number',
-      },
-      {
-        name: 'address',
-        value: '',
-        placeholder: 'Zip code, city, country',
-        type: 'text',
-        id: uuidv4(),
-        className: 'address',
-        isRequired: true,
-        dataLabel: 'Address',
-      },
-    ],
-    buttons: [
-      {
-        name: 'cancel',
-        type: 'reset',
-        className: 'cancel-button',
-        id: uuidv4(),
-        children: ['Cancel', 'C'],
-      },
-      {
-        name: 'save',
-        type: 'submit',
-        className: 'save-button',
-        id: uuidv4(),
-        children: ['Save', 'S'],
-      },
-      {
-        name: 'edit',
-        type: 'button',
-        className: 'edit-button',
-        id: uuidv4(),
-        children: ['Edit', 'E'],
-      },
-    ],
+  const [personalInfo, setPersonalInfo] = useState(() => {
+    const stored = localStorage.getItem('personalInfo');
+    return stored
+      ? JSON.parse(stored)
+      : {
+          id: 'personal-info',
+          isEditing: true,
+          title: 'Personal information',
+          inputs: [
+            {
+              name: 'fullName',
+              value: '',
+              placeholder: 'Enter your full name',
+              type: 'text',
+              id: uuidv4(),
+              className: 'full-name',
+              isRequired: true,
+              dataLabel: 'Full name',
+            },
+            {
+              name: 'email',
+              value: '',
+              placeholder: 'Enter your email',
+              type: 'email',
+              id: uuidv4(),
+              className: 'email',
+              isRequired: true,
+              dataLabel: 'Email',
+            },
+            {
+              name: 'phone',
+              value: '',
+              placeholder: 'Enter your phone number',
+              type: 'text',
+              id: uuidv4(),
+              className: 'phone-number',
+              isRequired: true,
+              dataLabel: 'Phone number',
+            },
+            {
+              name: 'address',
+              value: '',
+              placeholder: 'Zip code, city, country',
+              type: 'text',
+              id: uuidv4(),
+              className: 'address',
+              isRequired: true,
+              dataLabel: 'Address',
+            },
+          ],
+          buttons: [
+            {
+              name: 'cancel',
+              type: 'reset',
+              className: 'cancel-button',
+              id: uuidv4(),
+              children: ['Cancel', 'C'],
+            },
+            {
+              name: 'save',
+              type: 'submit',
+              className: 'save-button',
+              id: uuidv4(),
+              children: ['Save', 'S'],
+            },
+            {
+              name: 'edit',
+              type: 'button',
+              className: 'edit-button',
+              id: uuidv4(),
+              children: ['Edit', 'E'],
+            },
+          ],
+        };
   });
-  const [educationForms, setEducationForms] = useState([]);
-  const [jobForms, setJobForms] = useState([]);
+
+  const [educationForms, setEducationForms] = useState(() => {
+    const stored = localStorage.getItem('educationForms');
+    return stored ? JSON.parse(stored) : [];
+  });
+
+  const [jobForms, setJobForms] = useState(() => {
+    const stored = localStorage.getItem('jobForms');
+    return stored ? JSON.parse(stored) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('personalInfo', JSON.stringify(personalInfo));
+  }, [personalInfo]);
+
+  useEffect(() => {
+    localStorage.setItem('educationForms', JSON.stringify(educationForms));
+  }, [educationForms]);
+
+  useEffect(() => {
+    localStorage.setItem('jobForms', JSON.stringify(jobForms));
+  }, [jobForms]);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
 
