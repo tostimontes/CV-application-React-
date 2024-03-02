@@ -11,9 +11,11 @@ export default function Form({
   buttons,
   onSubmit,
   onCancel,
+  onEdit,
   onReset,
   onDelete,
   initialData,
+  isEditing,
 }) {
   const [formData, setFormData] = useState({ id, ...initialData });
 
@@ -29,6 +31,10 @@ export default function Form({
   function handleSubmit(e) {
     e.preventDefault();
     onSubmit(formData);
+  }
+
+  function handlePersonalEdit() {
+    onEdit();
   }
 
   function handleCancel(e) {
@@ -63,22 +69,45 @@ export default function Form({
                 name={input.name}
                 className={input.className}
                 isRequired={input.isRequired}
+                disabled={!isEditing && id === 'personal-info'}
               ></Input>
             </>
           );
         })}
         {buttons.map((button) => {
+          // Handle delete button for all forms
           if (button.name === 'delete') {
             return (
-              <Button
-                key={button.id}
-                // other button props
-                onClick={handleDelete}
-              >
+              <Button key={button.id} onClick={handleDelete}>
                 {button.children}
               </Button>
             );
           }
+
+          // Specific logic for 'personal-info' form
+          if (id === 'personal-info') {
+              if (
+                (isEditing &&
+                  (button.name === 'save' || button.name === 'cancel')) ||
+                (!isEditing && button.name === 'edit')
+              ) {
+                
+                return (
+                  <Button
+                    key={button.id}
+                    id={button.id}
+                    type={button.type}
+                    onClick={button.name === 'edit' ? handlePersonalEdit: button.onClick}
+                  >
+                    {button.children.join(' ')}
+                  </Button>
+                );
+              }
+            // Skip rendering other buttons in edit mode for personal-info
+            return null;
+          }
+
+          // Default button render for other forms
           return (
             <Button
               key={button.id}

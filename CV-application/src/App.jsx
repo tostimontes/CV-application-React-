@@ -9,7 +9,8 @@ import { v4 as uuidv4 } from 'uuid';
 function App() {
   // Hooks
   const [personalInfo, setPersonalInfo] = useState({
-    id: uuidv4(),
+    id: 'personal-info',
+    isEditing: true,
     title: 'Personal information',
     inputs: [
       {
@@ -68,6 +69,13 @@ function App() {
         id: uuidv4(),
         children: ['Save', 'S'],
       },
+      {
+        name: 'edit',
+        type: 'button',
+        className: 'edit-button',
+        id: uuidv4(),
+        children: ['Edit', 'E'],
+      },
     ],
   });
   const [educationForms, setEducationForms] = useState([]);
@@ -75,6 +83,7 @@ function App() {
 
   const [isFormOpen, setIsFormOpen] = useState(false);
 
+  // TODO: personal info persistence
   // TODO: on each forms refresh, they should get sorted from most recent to oldest
   // TODO: add and get data from localStorage
 
@@ -102,26 +111,28 @@ function App() {
         return form;
       });
     }
-    if (formData.id.startsWith('education-')) {
+    if (formData.id === 'personal-info') {
+      const updatedInputs = personalInfo.inputs.map((input) => {
+        return {
+          ...input,
+          value:
+            formData[input.name] !== undefined
+              ? formData[input.name]
+              : input.value,
+        };
+      });
+
+      setPersonalInfo({
+        ...personalInfo,
+        inputs: updatedInputs,
+        isEditing: false,
+      });
+    } else if (formData.id.startsWith('education-')) {
       setEducationForms((prevForms) => updateForms(prevForms));
     } else if (formData.id.startsWith('job-')) {
       setJobForms((prevForms) => updateForms(prevForms));
     }
     setIsFormOpen(false);
-  }
-
-  function handleFormSubmit(formData) {
-    if (formData.id === 'personalInfo') {
-      setPersonalInfo((prevInfo) => ({
-        ...prevInfo,
-        inputs: prevInfo.inputs.map((input) => ({
-          ...input,
-          value: formData[input.name] || input.value,
-        })),
-      }));
-    } else {
-      processFormsUpdate(formData);
-    }
   }
 
   function toggleShow(formId) {
@@ -312,11 +323,6 @@ function App() {
     }
     setIsFormOpen(true);
   }
-
-  function handleFormCancel(formData) {
-    processFormsUpdate(formData);
-  }
-
   function handleFormDeletion(formId) {
     setEducationForms((prevForms) =>
       prevForms.filter((form) => form.id !== formId),
@@ -324,9 +330,11 @@ function App() {
     setJobForms((prevForms) => prevForms.filter((form) => form.id !== formId));
     setIsFormOpen(false);
   }
-
   function handleEdit(formToEdit) {
     setIsFormOpen(true);
+
+    setPersonalInfo((prevInfo) => ({ ...prevInfo, isEditing: true }));
+
     setEducationForms((prevForms) =>
       prevForms.map((form) =>
         form.id === formToEdit.id ? { ...form, isEditing: true } : form,
@@ -402,10 +410,14 @@ function App() {
         <h1>CV Builder</h1>
         <Form
           id={personalInfo.id}
+          isEditing={personalInfo.isEditing}
           title={personalInfo.title}
           inputs={personalInfo.inputs}
           buttons={personalInfo.buttons}
-          onSubmit={handleFormSubmit}
+          onSubmit={processFormsUpdate}
+          onReset={processFormsUpdate}
+          onEdit={() => handleEdit(personalInfo)}
+          initialData={setInitialData(personalInfo)}
         ></Form>
         <div className="education">
           <h2>Education</h2>
@@ -433,8 +445,8 @@ function App() {
                   id={form.id}
                   inputs={form.inputs}
                   buttons={form.buttons}
-                  onSubmit={handleFormSubmit}
-                  onReset={handleFormCancel}
+                  onSubmit={processFormsUpdate}
+                  onReset={processFormsUpdate}
                   onDelete={() => handleFormDeletion(form.id)}
                   initialData={setInitialData(form)}
                 />
@@ -478,8 +490,8 @@ function App() {
                   id={form.id}
                   inputs={form.inputs}
                   buttons={form.buttons}
-                  onSubmit={handleFormSubmit}
-                  onReset={handleFormCancel}
+                  onSubmit={processFormsUpdate}
+                  onReset={processFormsUpdate}
                   onDelete={() => handleFormDeletion(form.id)}
                   initialData={setInitialData(form)}
                 />
