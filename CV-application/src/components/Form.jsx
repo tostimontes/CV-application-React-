@@ -3,6 +3,8 @@ import '../styles/Form.css';
 import Button from './Buttons';
 import Input from './Input';
 import { validate } from 'uuid';
+import Icon from '@mdi/react';
+import { mdiTrashCanOutline, mdiCancel } from '@mdi/js';
 
 export default function Form({
   id,
@@ -59,7 +61,12 @@ export default function Form({
           return (
             <>
               <label htmlFor={input.id}>
-                {input.dataLabel} <span>{input.name === 'end-date' && '(Leave empty for ongoing activities)'}{input.isRequired && 'required'}</span>
+                {input.dataLabel}{' '}
+                <span>
+                  {input.name === 'end-date' &&
+                    '(Leave empty for ongoing activities)'}
+                  {input.isRequired && 'required'}
+                </span>
               </label>
               <Input
                 key={input.id}
@@ -80,8 +87,15 @@ export default function Form({
         {buttons.map((button) => {
           if (button.name === 'delete') {
             return (
-              <Button key={button.id} onClick={handleDelete}>
-                {button.children}
+              <Button
+                key={button.id}
+                id={button.id}
+                iconPath={button.iconPath}
+                onClick={handleDelete}
+                value={button.text}
+              >
+                {button.iconPath && <Icon path={button.iconPath} />}
+                {button.text}
               </Button>
             );
           }
@@ -96,11 +110,14 @@ export default function Form({
                   key={button.id}
                   id={button.id}
                   type={button.type}
+                  iconPath={button.iconPath}
                   onClick={
                     button.name === 'edit' ? handlePersonalEdit : button.onClick
                   }
+                  value={button.text}
                 >
-                  {button.children.join(' ')}
+                  {button.iconPath && <Icon path={button.iconPath} />}
+                  {button.text}
                 </Button>
               );
             }
@@ -112,9 +129,12 @@ export default function Form({
               key={button.id}
               id={button.id}
               type={button.type}
+              iconPath={button.iconPath}
               onClick={button.onClick}
+              value={button.text}
             >
-              {button.children.join(' ')}
+              {button.iconPath && <Icon path={button.iconPath} />}
+              {button.text}
             </Button>
           );
         })}

@@ -1,32 +1,45 @@
 import '../styles/CVDisplay.css';
 
 export default function CVDisplay({ className, displayData }) {
-  // TODO: each edu and job form should have an identifier or something so that it groups each card and both education and jobs can be iterated over in a uniform way
   const { header, education, jobs } = displayData;
   return (
     <div className={className}>
       <div className="header">
         <h2>Hola World</h2>
-        <p>{header.fullName}</p>
-        {education.map(item => {
-          return (
-            <p>{item.company}</p>
-          )
-        })}
-        <p>{}</p>
-        <p>{}</p>
-        <p>{}</p>
+        <div className='contact-info'>
+          {header.fullName} {header.phone} {header.email} {header.address}
+        </div>
       </div>
       <div className="education-display">
         <h2>Education</h2>
-        <div className="card">
-          {education.map(item => {
-
-          })}
-        </div>
+        {education.map((item) => (
+          <div className="card">
+            <div className="date-and-location">
+              <p className="date">{`${item['start-date']} - ${item['end-date'] === '' ? 'present' : item['end-date']}`}</p>
+              <p className="location">{item.location}</p>
+            </div>
+            <div className="school-and-degree">
+              <h3 className="school">{item.school}</h3>
+              <p className="degree">{item.degree}</p>
+            </div>
+          </div>
+        ))}
       </div>
       <div className="jobs-display">
         <h2>Professional experience</h2>
+        {jobs.map((item) => (
+          <div className="card">
+            <div className="date-and-location">
+              <p className="date">{`${item['start-date']} - ${item['end-date'] === '' ? 'present' : item['end-date']}`}</p>
+              <p className="location">{item.location}</p>
+            </div>
+            <div className="company-and-position">
+              <h3 className="company">{item.company}</h3>
+              <p className="position">{item.position}</p>
+              <p className="description">{item.description}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

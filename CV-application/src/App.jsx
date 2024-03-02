@@ -5,6 +5,15 @@ import Button from './components/Buttons';
 import Form from './components/Form';
 import CVDisplay from './components/CVDisplay';
 import { v4 as uuidv4 } from 'uuid';
+import Icon from '@mdi/react';
+import {
+  mdiCancel,
+  mdiContentSave,
+  mdiTrashCanOutline,
+  mdiPencilOutline,
+  mdiEye,
+  mdiEyeClosed,
+} from '@mdi/js';
 
 function App() {
   // Hooks
@@ -64,21 +73,24 @@ function App() {
               type: 'reset',
               className: 'cancel-button',
               id: uuidv4(),
-              children: ['Cancel', 'C'],
+              iconPath: mdiCancel,
+              text: 'Cancel',
             },
             {
               name: 'save',
               type: 'submit',
               className: 'save-button',
               id: uuidv4(),
-              children: ['Save', 'S'],
+              iconPath: mdiContentSave,
+              text: 'Save',
             },
             {
               name: 'edit',
               type: 'button',
               className: 'edit-button',
               id: uuidv4(),
-              children: ['Edit', 'E'],
+              iconPath: mdiPencilOutline,
+              text: 'Edit',
             },
           ],
         };
@@ -108,9 +120,7 @@ function App() {
 
   const [isFormOpen, setIsFormOpen] = useState(false);
 
-  // TODO: personal info persistence
   // TODO: on each forms refresh, they should get sorted from most recent to oldest
-  // TODO: add and get data from localStorage
 
   // Helpers and handlers
   function processFormsUpdate(formData) {
@@ -235,21 +245,24 @@ function App() {
             name: 'delete',
             className: 'delete-button',
             id: uuidv4(),
-            children: ['Delete', 'D'],
+            iconPath: mdiTrashCanOutline,
+            text: 'Delete',
           },
           {
             name: 'cancel',
             type: 'reset',
             className: 'cancel-button',
             id: uuidv4(),
-            children: ['Cancel', 'C'],
+            iconPath: mdiCancel,
+            text: 'Cancel',
           },
           {
             name: 'save',
             type: 'submit',
             className: 'save-button',
             id: uuidv4(),
-            children: ['Save', 'S'],
+            iconPath: mdiContentSave,
+            text: 'Save',
           },
         ],
       };
@@ -326,21 +339,24 @@ function App() {
             name: 'delete',
             className: 'delete-button',
             id: uuidv4(),
-            children: ['Delete', 'D'],
+            iconPath: mdiTrashCanOutline,
+            text: 'Delete',
           },
           {
             name: 'cancel',
             type: 'reset',
             className: 'cancel-button',
             id: uuidv4(),
-            children: ['Cancel', 'C'],
+            iconPath: mdiCancel,
+            text: 'Cancel',
           },
           {
             name: 'save',
             type: 'submit',
             className: 'save-button',
             id: uuidv4(),
-            children: ['Save', 'S'],
+            iconPath: mdiContentSave,
+            text: 'Save',
           },
         ],
       };
@@ -461,7 +477,7 @@ function App() {
                     name="toggle-show"
                     onClick={() => toggleShow(form.id)}
                   >
-                    {'SVG'}
+                    {form.isVisible ? <Icon path={mdiEye}/> : <Icon path={mdiEyeClosed}/>}
                   </Button>
                 </div>
               )}
@@ -506,7 +522,7 @@ function App() {
                     name="toggle-show"
                     onClick={() => toggleShow(form.id)}
                   >
-                    {'SVG'}
+                    {form.isVisible ? <Icon path={mdiEye}/> : <Icon path={mdiEyeClosed}/>}
                   </Button>
                 </div>
               )}
