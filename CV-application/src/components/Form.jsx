@@ -95,12 +95,14 @@ export default function Form({
               return (
                 <Button
                   key={button.id}
+                  className={'delete'}
                   id={button.id}
                   iconPath={button.iconPath}
                   onClick={handleDelete}
                   value={button.text}
                 >
                   {button.iconPath && <Icon path={button.iconPath} />}
+                  
                   {button.text}
                 </Button>
               );

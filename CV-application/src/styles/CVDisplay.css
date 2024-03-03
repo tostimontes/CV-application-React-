@@ -1,5 +1,7 @@
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 :root {
@@ -32,11 +34,10 @@
 .jobs-display {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
   & h2 {
     background-color: rgb(107, 133, 63);
     color: white;
-    margin: 0 0 1rem 0;
+    margin: 0;
     padding: 0.3rem;
   }
 }
@@ -49,16 +50,39 @@ svg {
 .card {
   display: flex;
   gap: 1rem;
+  padding: 0 0.9rem;
   > .date-and-location {
+    width: 20%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: end;
-    gap: 0.5rem;
+    padding-top: 0.3rem;
+    > .date,
+    > .location {
+      font-size: 0.9rem;
+    }
   }
   > .school-and-degree,
   > .company-and-position {
+    width: 80%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: start;
+  }
+  & .company,
+  & .school {
+    font-size: 1.2rem;
+  }
+  & .position,
+  & .degree {
+    font-style: italic;
+    font-size: 1rem;
+  }
+  & .description {
+      font-size: 0.9rem;
+      text-align: left;
+      color: rgb(80, 80, 80);
   }
 }

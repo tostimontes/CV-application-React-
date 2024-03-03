@@ -20,7 +20,7 @@ export default function CVDisplay({ className, displayData }) {
           {education.map((item) => (
             <div className="card">
               <div className="date-and-location">
-                <p className="date">{`${item['start-date']} - ${item['end-date'] === '' ? 'present' : item['end-date']}`}</p>
+                <p className="date">{`${item['start-date'] && item['start-date'] + ' ||'} ${item['end-date'] === '' ? 'present' : item['end-date']}`}</p>
                 <p className="location">{item.location}</p>
               </div>
               <div className="school-and-degree">
@@ -35,7 +35,7 @@ export default function CVDisplay({ className, displayData }) {
           {jobs.map((item) => (
             <div className="card">
               <div className="date-and-location">
-                <p className="date">{`${item['start-date']} - ${item['end-date'] === '' ? 'present' : item['end-date']}`}</p>
+                <p className="date">{`${item['start-date']} || ${item['end-date'] === '' ? 'present' : item['end-date']}`}</p>
                 <p className="location">{item.location}</p>
               </div>
               <div className="company-and-position">
