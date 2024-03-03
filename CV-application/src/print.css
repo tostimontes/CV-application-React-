@@ -1,0 +1,109 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-print-color-adjust: exact;
+  color-adjust: exact;
+}
+
+.forms,
+.forms *,
+.buttons-wrapper,
+button {
+  display: none !important;
+}
+
+.display-wrapper * {
+  display: block;
+}
+
+.display,
+.display-wrapper {
+  background-color: white !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+:root {
+  --contact-info-size: 1.1rem;
+}
+
+.header {
+  background-color: darkolivegreen;
+  margin: 0;
+  color: wheat;
+  padding: 1rem 2rem;
+  > h2 {
+    margin: 0;
+    padding: 0 0 0.5rem 0;
+  }
+  > .contact-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 0.5rem;
+    font-size: var(--contact-info-size);
+    > svg {
+      margin-top: 5px;
+    }
+  }
+}
+
+.education-display,
+.jobs-display {
+  display: flex;
+  flex-direction: column;
+  & h2 {
+    background-color: rgb(107, 133, 63);
+    color: white;
+    margin: 0;
+    padding: 0.3rem;
+  }
+}
+
+svg {
+  width: var(--contact-info-size);
+  height: var(--contact-info-size);
+}
+
+.card {
+  display: flex;
+  gap: 1rem;
+  padding: 0 0.9rem;
+  > .date-and-location {
+    width: 20%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    padding-top: 0.3rem;
+    > .date,
+    > .location {
+      font-size: 0.9rem;
+    }
+  }
+  > .school-and-degree,
+  > .company-and-position {
+    width: 80%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+  }
+  & .company,
+  & .school {
+    font-size: 1.2rem;
+  }
+  & .position,
+  & .degree {
+    font-style: italic;
+    font-size: 1rem;
+  }
+  & .description {
+    font-size: 0.9rem;
+    text-align: left;
+    color: rgb(80, 80, 80);
+  }
+}

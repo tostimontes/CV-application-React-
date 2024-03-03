@@ -13,6 +13,7 @@ export default function Input({
   style,
   isRequired = false,
   dataLabel,
+  autoFocus,
 }) {
   return type === 'textarea' ? (
     <textarea
@@ -29,6 +30,7 @@ export default function Input({
     />
   ) : (
     <input
+      autoFocus={autoFocus}
       value={value}
       onChange={onChange}
       placeholder={placeholder}

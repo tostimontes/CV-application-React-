@@ -56,9 +56,14 @@ export default function Form({
   // TODO: autoFocus on first input
   return (
     <>
-      <form action="" className={className} onSubmit={handleSubmit} onReset={handleCancel}>
+      <form
+        action=""
+        className={className}
+        onSubmit={handleSubmit}
+        onReset={handleCancel}
+      >
         {title && <h2>{title}</h2>}
-        {inputs.map((input) => {
+        {inputs.map((input, index) => {
           return (
             <>
               <label htmlFor={input.id}>
@@ -74,6 +79,7 @@ export default function Form({
                 </span>
               </label>
               <Input
+                autoFocus={input.name === 'company' || input.name === 'school'}
                 key={input.id}
                 id={input.id}
                 value={formData[input.name]}
@@ -102,7 +108,7 @@ export default function Form({
                   value={button.text}
                 >
                   {button.iconPath && <Icon path={button.iconPath} />}
-                  
+
                   {button.text}
                 </Button>
               );
@@ -120,7 +126,9 @@ export default function Form({
                     type={button.type}
                     iconPath={button.iconPath}
                     onClick={
-                      button.name === 'edit' ? handlePersonalEdit : button.onClick
+                      button.name === 'edit'
+                        ? handlePersonalEdit
+                        : button.onClick
                     }
                     value={button.text}
                   >
