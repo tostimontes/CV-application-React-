@@ -8,7 +8,7 @@ The application uses [Vite](https://vitejs.dev/) as the build tool.
 
 ## Usage
 
-Visit the project's site at [CV Builder]() by [_tostimontes_](https://github.com/tostimontes/)
+Visit the project's site at [CV Builder](https://cv-application-react-beryl.vercel.app/) by [_tostimontes_](https://github.com/tostimontes/)
 ![example-usage](./CV-application/src/assets/usage-video.gif)
 
 ## Key Features
