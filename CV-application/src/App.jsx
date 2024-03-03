@@ -132,79 +132,8 @@ function App() {
 
   function handleClear() {
     localStorage.clear();
-    setPersonalInfo({
-      id: 'personal-info',
-      isEditing: true,
-      title: 'Personal information',
-      inputs: [
-        {
-          name: 'fullName',
-          value: '',
-          placeholder: 'Enter your full name',
-          type: 'text',
-          id: uuidv4(),
-          className: 'full-name',
-          isRequired: true,
-          dataLabel: 'Full name',
-        },
-        {
-          name: 'email',
-          value: '',
-          placeholder: 'Enter your email',
-          type: 'email',
-          id: uuidv4(),
-          className: 'email',
-          isRequired: true,
-          dataLabel: 'Email',
-        },
-        {
-          name: 'phone',
-          value: '',
-          placeholder: 'Enter your phone number',
-          type: 'text',
-          id: uuidv4(),
-          className: 'phone-number',
-          isRequired: true,
-          dataLabel: 'Phone number',
-        },
-        {
-          name: 'address',
-          value: '',
-          placeholder: 'Zip code, city, country',
-          type: 'text',
-          id: uuidv4(),
-          className: 'address',
-          isRequired: true,
-          dataLabel: 'Address',
-        },
-      ],
-      buttons: [
-        {
-          name: 'cancel',
-          type: 'reset',
-          className: 'cancel-button',
-          id: uuidv4(),
-          iconPath: mdiCancel,
-          text: 'Cancel',
-        },
-        {
-          name: 'save',
-          type: 'submit',
-          className: 'save-button',
-          id: uuidv4(),
-          iconPath: mdiContentSave,
-          text: 'Save',
-        },
-        {
-          name: 'edit',
-          type: 'button',
-          className: 'edit-button',
-          id: uuidv4(),
-          iconPath: mdiPencilOutline,
-          text: 'Edit',
-        },
-      ],
-    });
+
+    setPersonalInfo(defaultPersonalInfo);
     setEducationForms([]);
     setJobForms([]);
   }
